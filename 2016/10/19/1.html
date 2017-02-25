@@ -1,0 +1,72 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" type="image/icon" href="/favicon.ico">
+    
+    <title>docker 컨테이너 & 이미지 정리</title>
+    
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<header>
+    <div id="nav_container">
+        <nav>
+            <a href="/">Dev. Neoguri</a>
+        </nav>
+    </div>
+</header>
+<section id="main">
+    <article>
+    <div class="heading">docker 컨테이너 & 이미지 정리</div>
+    <p class="meta">🗓 19 Oct 2016</p>
+    <div class="content">
+    <p>docker 명령어의 -q 옵션으로 ID 값들만 가져올 수 있다.</p>
+
+<p>실행중인 모든 컨테이너 중지하기</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>docker stop $(docker ps -a -q)
+</code></pre>
+</div>
+
+<p>누적된 이미지들로 디스크가 가득 찼을 경우 등 전체 이미지 삭제 하기</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>docker rmi `docker images -a -q`
+</code></pre>
+</div>
+
+<p>이미지 생성 날짜 단위(weeks ago, months ago 등)를 grep 해서 오래된 것만 삭제할 수도 있다.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>docker rmi `docker images -a | grep 'weeks ago\|months ago' | awk '{print $3}`'
+</code></pre>
+</div>
+
+    </div>
+    <!--<div class="tags">
+
+
+
+<a class="label label-default" href="/tags#tip-ref" title="View posts tagged with &quot;tip&quot;">tip</a>
+
+<a class="label label-default" href="/tags#docker-ref" title="View posts tagged with &quot;docker&quot;">docker</a>
+
+<a class="label label-default" href="/tags#shell-ref" title="View posts tagged with &quot;shell&quot;">shell</a>
+
+
+</div>-->
+    <!--<div class="post-footer"><a class="back" onclick="history.back();" href="javascript:;">< back</a></div>-->
+</article>
+<span class="separator"></span>
+<div id="disqus_thread"></div>
+<script>
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//dev-neoguri.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+</section>
+<footer>© 2017 Lee Hongchae</footer>
+</body>
+</html>

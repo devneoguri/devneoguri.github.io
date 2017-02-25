@@ -1,0 +1,74 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" type="image/icon" href="/favicon.ico">
+    
+    <title>팝업 금지된 사이트에서의 confirm 처리</title>
+    
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<header>
+    <div id="nav_container">
+        <nav>
+            <a href="/">Dev. Neoguri</a>
+        </nav>
+    </div>
+</header>
+<section id="main">
+    <article>
+    <div class="heading">팝업 금지된 사이트에서의 confirm 처리</div>
+    <p class="meta">🗓 24 Oct 2016</p>
+    <div class="content">
+    <p>웹페이지의 javascript에서 alert이나 confirm을 사용할 때 대부분의 브라우저에는 반복되는 popup을 차단할 수 있는 기능이 있다.</p>
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span><span class="nx">confirm</span><span class="p">(</span><span class="s1">'continue?'</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p><img src="/img/prevent_popup.png" alt="a" />
+차단 후 생성되는 confirm의 결과는 항상 false가 리턴되고 doSomething()은 실행되지 않는다.
+해당 부분이 중요한 로직이라면 반복 노출 팝업을 차단한 사용자에게 페이지 동작상에 문제가 발생할 수 있다.</p>
+
+<p>이를 방지하기 위해서 팝업이 차단된 상태일때 임의로 confirm의 결과를 항상 true로 처리하고자 한다면 아래 방법으로 가능하다.</p>
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">confirmTime</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">confirm</span><span class="p">(</span><span class="s1">'continue?'</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">doSomething</span><span class="p">();</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">-</span> <span class="nx">confirmTime</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 팝업 금지된 상태</span>
+    <span class="nx">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>사용자의 입력으로는 (거의 아마도..) 10ms 안에 Cancel을 선택할 수 없을 것이며 doSomething()은 항상 실행된다.</p>
+
+    </div>
+    <!--<div class="tags">
+
+
+
+<a class="label label-default" href="/tags#tip-ref" title="View posts tagged with &quot;tip&quot;">tip</a>
+
+<a class="label label-default" href="/tags#javascript-ref" title="View posts tagged with &quot;javascript&quot;">javascript</a>
+
+
+</div>-->
+    <!--<div class="post-footer"><a class="back" onclick="history.back();" href="javascript:;">< back</a></div>-->
+</article>
+<span class="separator"></span>
+<div id="disqus_thread"></div>
+<script>
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//dev-neoguri.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+</section>
+<footer>© 2017 Lee Hongchae</footer>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2017-02-25T11:28:08+09:00</updated><id>//</id><title type="html">Dev. Neoguri</title><entry><title type="html">HTTP Strict Transport Security</title><link href="/2017/01/04/HSTS.html" rel="alternate" type="text/html" title="HTTP Strict Transport Security" /><published>2017-01-04T15:05:00+09:00</published><updated>2017-01-04T15:05:00+09:00</updated><id>/2017/01/04/HSTS</id><content type="html" xml:base="/2017/01/04/HSTS.html">&lt;p&gt;https 요청의 response header에 ‘Strict-Transport-Security’ 가 포함되어 있으면 해당 도메인에 대해서 브라우저에 가능한 https로 통신하라고 알려주는 기능&lt;/p&gt;
+
+&lt;p&gt;http로 들어가도 307 status로 https redirect 된다. 명시적인 301 처리보다 비용적으로 유리하다.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;curl -v &lt;span class=&quot;s1&quot;&gt;'https://logins.daum.net/accounts/loginform.do'&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;   Trying 114.108.157.212...
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Connected to logins.daum.net &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;114.108.157.212&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; port 443 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#0)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; TLS 1.2 connection using TLS_RSA_WITH_AES_256_CBC_SHA
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Server certificate: logins.daum.net
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Server certificate: Symantec Class 3 EV SSL CA - G3
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Server certificate: VeriSign Class 3 Public Primary Certification Authority - G5
+&lt;span class=&quot;gp&quot;&gt;&amp;gt; &lt;/span&gt;GET /accounts/loginform.do HTTP/1.1
+&lt;span class=&quot;gp&quot;&gt;&amp;gt; &lt;/span&gt;Host: logins.daum.net
+&lt;span class=&quot;gp&quot;&gt;&amp;gt; &lt;/span&gt;User-Agent: curl/7.49.1
+&lt;span class=&quot;gp&quot;&gt;&amp;gt; &lt;/span&gt;Accept: &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;/&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;
+&amp;gt;
+&amp;lt; HTTP/1.1 200 OK
+&amp;lt; Pragma: no-cache
+&amp;lt; Expires: Thu, 01 Jan 1970 00:00:00 GMT
+&amp;lt; Cache-Control: no-cache
+&amp;lt; Cache-Control: no-store
+&amp;lt; Strict-Transport-Security: max-age&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2592000
+...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;https가 지원되지 않는 개발 환경을 테스트할 경우 등에 해당 기능을 끄고 싶은 경우가 있다.&lt;/p&gt;
+
+&lt;h4 id=&quot;spring-security-&quot;&gt;Spring Security에서 끄는법&lt;/h4&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@EnableWebSecurity&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebSecurityConfig&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WebSecurityConfigurerAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+	&lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+	&lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;configure&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpSecurity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;
+			&lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+			&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;httpStrictTransportSecurity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;disable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;chrome--&quot;&gt;Chrome 브라우저에서 끄는법&lt;/h4&gt;
+&lt;p&gt;chrome://net-internals/#hsts 에 들어가서 delete domain 하면 된다.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;참조&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security&quot;&gt;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><category term="tip" /><category term="spring-security" /><category term="browser" /><summary type="html">https 요청의 response header에 ‘Strict-Transport-Security’ 가 포함되어 있으면 해당 도메인에 대해서 브라우저에 가능한 https로 통신하라고 알려주는 기능</summary></entry><entry><title type="html">Spring에서 Date/Time Formatter 사용</title><link href="/2016/12/19/spring-dateformat.html" rel="alternate" type="text/html" title="Spring에서 Date/Time Formatter 사용" /><published>2016-12-19T15:05:00+09:00</published><updated>2016-12-19T15:05:00+09:00</updated><id>/2016/12/19/spring-dateformat</id><content type="html" xml:base="/2016/12/19/spring-dateformat.html">&lt;p&gt;Spring 3.1 이후 버전에서는 Controller @RequestParam 등에서 바로 date format 처리가 가능하도록 field type 기반의 formatter 와 annotation 기반의 formatter 들이 정의 되어 있다.&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;processFieldDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@RequestParam&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LocalDate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;localDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// yy. mm. dd&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;processAnnotationDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@RequestParam&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;@DateTimeFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pattern&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;yyyy-mm-dd&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LocalDate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;localDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// yyyy-mm-dd&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;field의 기본 포맷은 locale을 따르며 ko_KR 에서 LocalDate 기본은 &lt;em&gt;[ yy. mm. dd ]&lt;/em&gt; 이런식으로 생겼다.&lt;/p&gt;
+
+&lt;p&gt;디폴트 설정된 상세 내용은 아래를 참고하여 소스에서 확인 가능하다.&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;//DefaultFormattingConversionService.java&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;DateTimeFormatterRegistrar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;JSR310&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JodaTimeFormatterRegistrar&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateFormatterRegistrar&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;//FormatterRegistrar 구현체&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;registerFormatters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FormatterRegistry&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;//Formatter 구현체&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Locale&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;locale&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;지원되지 않는 포맷 처리를 위해서는 WebDataBinder에 에디터 처리를 추가하던가 Converter 를 구현해야한다.&lt;/p&gt;</content><category term="spring" /><summary type="html">Spring 3.1 이후 버전에서는 Controller @RequestParam 등에서 바로 date format 처리가 가능하도록 field type 기반의 formatter 와 annotation 기반의 formatter 들이 정의 되어 있다.
+```java
+public void processFieldDate(@RequestParam LocalDate localDate) {  // yy. mm. dd
+   …
+}</summary></entry><entry><title type="html">팝업 금지된 사이트에서의 confirm 처리</title><link href="/2016/10/24/prevent-alert-workaround.html" rel="alternate" type="text/html" title="팝업 금지된 사이트에서의 confirm 처리" /><published>2016-10-24T01:10:00+09:00</published><updated>2016-10-24T01:10:00+09:00</updated><id>/2016/10/24/prevent-alert-workaround</id><content type="html" xml:base="/2016/10/24/prevent-alert-workaround.html">&lt;p&gt;웹페이지의 javascript에서 alert이나 confirm을 사용할 때 대부분의 브라우저에는 반복되는 popup을 차단할 수 있는 기능이 있다.&lt;/p&gt;
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;confirm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'continue?'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;img src=&quot;/img/prevent_popup.png&quot; alt=&quot;a&quot; /&gt;
+차단 후 생성되는 confirm의 결과는 항상 false가 리턴되고 doSomething()은 실행되지 않는다.
+해당 부분이 중요한 로직이라면 반복 노출 팝업을 차단한 사용자에게 페이지 동작상에 문제가 발생할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;이를 방지하기 위해서 팝업이 차단된 상태일때 임의로 confirm의 결과를 항상 true로 처리하고자 한다면 아래 방법으로 가능하다.&lt;/p&gt;
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;confirmTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;confirm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'continue?'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;confirmTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 팝업 금지된 상태&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;사용자의 입력으로는 (거의 아마도..) 10ms 안에 Cancel을 선택할 수 없을 것이며 doSomething()은 항상 실행된다.&lt;/p&gt;</content><category term="tip" /><category term="javascript" /><summary type="html">웹페이지의 javascript에서 alert이나 confirm을 사용할 때 대부분의 브라우저에는 반복되는 popup을 차단할 수 있는 기능이 있다.
+if(confirm('continue?')) {
+    doSomething();
+}
+
+
+
+차단 후 생성되는 confirm의 결과는 항상 false가 리턴되고 doSomething()은 실행되지 않는다.
+해당 부분이 중요한 로직이라면 반복 노출 팝업을 차단한 사용자에게 페이지 동작상에 문제가 발생할 수 있다.</summary></entry><entry><title type="html">Spring RestTemplate</title><link href="/2016/10/21/spring-resttemplate.html" rel="alternate" type="text/html" title="Spring RestTemplate" /><published>2016-10-21T23:30:00+09:00</published><updated>2016-10-21T23:30:00+09:00</updated><id>/2016/10/21/spring-resttemplate</id><content type="html" xml:base="/2016/10/21/spring-resttemplate.html">&lt;p&gt;Spring 내부에는 HTTP 요청을 생성하고 응답을 처리하기 위한 RestTemplate 구현체가 포함되어 있어서 &lt;strong&gt;GET, POST, PUT, DELETE, HEAD, OPTIONS&lt;/strong&gt; 등의 주요 메서드들을 고수준으로 사용 가능하다.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vars&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;vars&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;hotel&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;42&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;vars&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;booking&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;21&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;restTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getForObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://example.com/hotels/{hotel}/bookings/{booking}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vars&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;위 코드는 &lt;a href=&quot;&quot;&gt;http://example.com/hotels/42/rooms/42&lt;/a&gt; 에 대한 GET 요청을 수행하여 String 으로 결과를 가져온다.&lt;/p&gt;
+
+&lt;p&gt;RestTemplate는 디폴트 설정으로 Java에 내장되어 있는 HTTP 요청 구현을 사용하며 ClientHttpRequestFactory 구현체를 이용하여 override 가능하다. 특히 Apache HttpComponents를 사용하는 HttpComponentsClientHttpRequestFactory를 이용하면 인증 Header나 커넥션 풀 관리에서 유리하다.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;RestTemplate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;template&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RestTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HttpComponentsClientHttpRequestFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;참조&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://docs.spring.io/spring/docs/current/spring-framework-reference/html/remoting.html#rest-resttemplate&quot;&gt;http://docs.spring.io/spring/docs/current/spring-framework-reference/html/remoting.html#rest-resttemplate&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><category term="spring" /><summary type="html">Spring 내부에는 HTTP 요청을 생성하고 응답을 처리하기 위한 RestTemplate 구현체가 포함되어 있어서 GET, POST, PUT, DELETE, HEAD, OPTIONS 등의 주요 메서드들을 고수준으로 사용 가능하다.</summary></entry><entry><title type="html">docker 컨테이너 &amp;amp; 이미지 정리</title><link href="/2016/10/19/1.html" rel="alternate" type="text/html" title="docker 컨테이너 &amp; 이미지 정리" /><published>2016-10-19T22:05:00+09:00</published><updated>2016-10-19T22:05:00+09:00</updated><id>/2016/10/19/1</id><content type="html" xml:base="/2016/10/19/1.html">&lt;p&gt;docker 명령어의 -q 옵션으로 ID 값들만 가져올 수 있다.&lt;/p&gt;
+
+&lt;p&gt;실행중인 모든 컨테이너 중지하기&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker stop $(docker ps -a -q)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;누적된 이미지들로 디스크가 가득 찼을 경우 등 전체 이미지 삭제 하기&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker rmi `docker images -a -q`
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;이미지 생성 날짜 단위(weeks ago, months ago 등)를 grep 해서 오래된 것만 삭제할 수도 있다.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker rmi `docker images -a | grep 'weeks ago\|months ago' | awk '{print $3}`'
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;</content><category term="tip" /><category term="docker" /><category term="shell" /><summary type="html">docker 명령어의 -q 옵션으로 ID 값들만 가져올 수 있다.</summary></entry><entry><title type="html">테스트 블로그</title><link href="/jekyll/update/2016/10/19/welcome-to-jekyll.html" rel="alternate" type="text/html" title="테스트 블로그" /><published>2016-10-19T00:21:28+09:00</published><updated>2016-10-19T00:21:28+09:00</updated><id>/jekyll/update/2016/10/19/welcome-to-jekyll</id><content type="html" xml:base="/jekyll/update/2016/10/19/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+
+&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+
+&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tom'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints 'Hi, Tom' to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry></feed>

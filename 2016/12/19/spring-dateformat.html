@@ -1,0 +1,80 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" type="image/icon" href="/favicon.ico">
+    
+    <title>Spring에서 Date/Time Formatter 사용</title>
+    
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<header>
+    <div id="nav_container">
+        <nav>
+            <a href="/">Dev. Neoguri</a>
+        </nav>
+    </div>
+</header>
+<section id="main">
+    <article>
+    <div class="heading">Spring에서 Date/Time Formatter 사용</div>
+    <p class="meta">🗓 19 Dec 2016</p>
+    <div class="content">
+    <p>Spring 3.1 이후 버전에서는 Controller @RequestParam 등에서 바로 date format 처리가 가능하도록 field type 기반의 formatter 와 annotation 기반의 formatter 들이 정의 되어 있다.</p>
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">processFieldDate</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="n">LocalDate</span> <span class="n">localDate</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// yy. mm. dd</span>
+   <span class="o">...</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">processAnnotationDate</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="nd">@DateTimeFormat</span><span class="o">(</span><span class="n">pattern</span> <span class="o">=</span> <span class="s">"yyyy-mm-dd"</span><span class="o">)</span> <span class="n">LocalDate</span> <span class="n">localDate</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// yyyy-mm-dd</span>
+   <span class="o">...</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<p>field의 기본 포맷은 locale을 따르며 ko_KR 에서 LocalDate 기본은 <em>[ yy. mm. dd ]</em> 이런식으로 생겼다.</p>
+
+<p>디폴트 설정된 상세 내용은 아래를 참고하여 소스에서 확인 가능하다.</p>
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">//DefaultFormattingConversionService.java</span>
+<span class="n">DateTimeFormatterRegistrar</span><span class="o">(</span><span class="n">JSR310</span><span class="o">)</span> <span class="o">,</span> <span class="n">JodaTimeFormatterRegistrar</span> <span class="o">|</span> <span class="n">DateFormatterRegistrar</span>
+
+<span class="c1">//FormatterRegistrar 구현체</span>
+<span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">registerFormatters</span><span class="o">(</span><span class="n">FormatterRegistry</span> <span class="n">registry</span><span class="o">);</span>
+
+<span class="c1">//Formatter 구현체</span>
+<span class="nd">@Override</span>
+<span class="n">parse</span><span class="o">(</span><span class="n">String</span> <span class="n">text</span><span class="o">,</span> <span class="n">Locale</span> <span class="n">locale</span><span class="o">)</span> <span class="o">;</span>
+</code></pre>
+</div>
+
+<p>지원되지 않는 포맷 처리를 위해서는 WebDataBinder에 에디터 처리를 추가하던가 Converter 를 구현해야한다.</p>
+
+
+    </div>
+    <!--<div class="tags">
+
+
+
+<a class="label label-default" href="/tags#spring-ref" title="View posts tagged with &quot;spring&quot;">spring</a>
+
+
+</div>-->
+    <!--<div class="post-footer"><a class="back" onclick="history.back();" href="javascript:;">< back</a></div>-->
+</article>
+<span class="separator"></span>
+<div id="disqus_thread"></div>
+<script>
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//dev-neoguri.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+</section>
+<footer>© 2017 Lee Hongchae</footer>
+</body>
+</html>

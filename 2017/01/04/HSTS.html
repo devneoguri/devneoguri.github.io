@@ -1,0 +1,107 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" type="image/icon" href="/favicon.ico">
+    
+    <title>HTTP Strict Transport Security</title>
+    
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<header>
+    <div id="nav_container">
+        <nav>
+            <a href="/">Dev. Neoguri</a>
+        </nav>
+    </div>
+</header>
+<section id="main">
+    <article>
+    <div class="heading">HTTP Strict Transport Security</div>
+    <p class="meta">🗓 04 Jan 2017</p>
+    <div class="content">
+    <p>https 요청의 response header에 ‘Strict-Transport-Security’ 가 포함되어 있으면 해당 도메인에 대해서 브라우저에 가능한 https로 통신하라고 알려주는 기능</p>
+
+<p>http로 들어가도 307 status로 https redirect 된다. 명시적인 301 처리보다 비용적으로 유리하다.</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -v <span class="s1">'https://logins.daum.net/accounts/loginform.do'</span>
+
+<span class="k">*</span>   Trying 114.108.157.212...
+<span class="k">*</span> Connected to logins.daum.net <span class="o">(</span>114.108.157.212<span class="o">)</span> port 443 <span class="o">(</span><span class="c">#0)</span>
+<span class="k">*</span> TLS 1.2 connection using TLS_RSA_WITH_AES_256_CBC_SHA
+<span class="k">*</span> Server certificate: logins.daum.net
+<span class="k">*</span> Server certificate: Symantec Class 3 EV SSL CA - G3
+<span class="k">*</span> Server certificate: VeriSign Class 3 Public Primary Certification Authority - G5
+<span class="gp">&gt; </span>GET /accounts/loginform.do HTTP/1.1
+<span class="gp">&gt; </span>Host: logins.daum.net
+<span class="gp">&gt; </span>User-Agent: curl/7.49.1
+<span class="gp">&gt; </span>Accept: <span class="k">*</span>/<span class="k">*</span>
+&gt;
+&lt; HTTP/1.1 200 OK
+&lt; Pragma: no-cache
+&lt; Expires: Thu, 01 Jan 1970 00:00:00 GMT
+&lt; Cache-Control: no-cache
+&lt; Cache-Control: no-store
+&lt; Strict-Transport-Security: max-age<span class="o">=</span>2592000
+...
+</code></pre>
+</div>
+<p>https가 지원되지 않는 개발 환경을 테스트할 경우 등에 해당 기능을 끄고 싶은 경우가 있다.</p>
+
+<h4 id="spring-security-">Spring Security에서 끄는법</h4>
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@EnableWebSecurity</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebSecurityConfig</span> <span class="kd">extends</span> <span class="n">WebSecurityConfigurerAdapter</span> <span class="o">{</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">configure</span><span class="o">(</span><span class="n">HttpSecurity</span> <span class="n">http</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+		<span class="n">http</span>
+			<span class="c1">// ...</span>
+			<span class="o">.</span><span class="na">headers</span><span class="o">().</span><span class="na">httpStrictTransportSecurity</span><span class="o">().</span><span class="na">disable</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h4 id="chrome--">Chrome 브라우저에서 끄는법</h4>
+<p>chrome://net-internals/#hsts 에 들어가서 delete domain 하면 된다.</p>
+
+<hr />
+
+<p>참조</p>
+<ul>
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security</a></li>
+</ul>
+
+    </div>
+    <!--<div class="tags">
+
+
+
+<a class="label label-default" href="/tags#tip-ref" title="View posts tagged with &quot;tip&quot;">tip</a>
+
+<a class="label label-default" href="/tags#spring-security-ref" title="View posts tagged with &quot;spring-security&quot;">spring-security</a>
+
+<a class="label label-default" href="/tags#browser-ref" title="View posts tagged with &quot;browser&quot;">browser</a>
+
+
+</div>-->
+    <!--<div class="post-footer"><a class="back" onclick="history.back();" href="javascript:;">< back</a></div>-->
+</article>
+<span class="separator"></span>
+<div id="disqus_thread"></div>
+<script>
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//dev-neoguri.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+</section>
+<footer>© 2017 Lee Hongchae</footer>
+</body>
+</html>

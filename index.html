@@ -1,0 +1,171 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" type="image/icon" href="/favicon.ico">
+    
+    <title>Dev. Neoguri</title>
+    
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<header>
+    <div id="nav_container">
+        <nav>
+            <a href="/">Dev. Neoguri</a>
+        </nav>
+    </div>
+</header>
+<section id="main">
+    {"tip"=>[#<Jekyll::Document _posts/2017-01-04-HSTS.md collection=posts>, #<Jekyll::Document _posts/2016-10-24-prevent-alert-workaround.md collection=posts>, #<Jekyll::Document _posts/2016-10-19-1.md collection=posts>], "docker"=>[#<Jekyll::Document _posts/2016-10-19-1.md collection=posts>], "shell"=>[#<Jekyll::Document _posts/2016-10-19-1.md collection=posts>], "spring"=>[#<Jekyll::Document _posts/2016-12-19-spring-dateformat.md collection=posts>, #<Jekyll::Document _posts/2016-10-21-spring-resttemplate.md collection=posts>], "javascript"=>[#<Jekyll::Document _posts/2016-10-24-prevent-alert-workaround.md collection=posts>], "spring-security"=>[#<Jekyll::Document _posts/2017-01-04-HSTS.md collection=posts>], "browser"=>[#<Jekyll::Document _posts/2017-01-04-HSTS.md collection=posts>]}
+
+<div class="post">
+    <a href="/2017/01/04/HSTS.html">
+        <h3>HTTP Strict Transport Security</h3>
+        <div class="sample">
+            https 요청의 response header에 ‘Strict-Transport-Security’ 가 포함되어 있으면 해당 도메인에 대해서 브라우저에 가능한 https로 통신하라고 알려주는 기능
+
+http로 들어가도 307 status로 https redirect 된다. 명시적인 301 처리보다 비용적으로 유리하다.
+
+$ curl -v 'https://logins.daum.net/accounts/loginform.do'
+
+*   Trying 114.108.157.212...
+* Connected to logins.daum.net (
+        </div>
+    </a>
+
+    <small>2017 / 01 / 04</small>
+    <span class="bar">|</span>
+    <span class="home-post-labels">
+            
+            <a class="label">tip</a>
+            
+            <a class="label">spring-security</a>
+            
+            <a class="label">browser</a>
+            
+        </span>
+</div>
+
+<div class="post">
+    <a href="/2016/12/19/spring-dateformat.html">
+        <h3>Spring에서 Date/Time Formatter 사용</h3>
+        <div class="sample">
+            Spring 3.1 이후 버전에서는 Controller @RequestParam 등에서 바로 date format 처리가 가능하도록 field type 기반의 formatter 와 annotation 기반의 formatter 들이 정의 되어 있다.
+public void processFieldDate(@RequestParam LocalDate localDate) {  // yy. mm. dd
+   ...
+}
+
+public void processAnnotationDate(@RequestParam @DateTimeFormat(patter
+        </div>
+    </a>
+
+    <small>2016 / 12 / 19</small>
+    <span class="bar">|</span>
+    <span class="home-post-labels">
+            
+            <a class="label">spring</a>
+            
+        </span>
+</div>
+
+<div class="post">
+    <a href="/2016/10/24/prevent-alert-workaround.html">
+        <h3>팝업 금지된 사이트에서의 confirm 처리</h3>
+        <div class="sample">
+            웹페이지의 javascript에서 alert이나 confirm을 사용할 때 대부분의 브라우저에는 반복되는 popup을 차단할 수 있는 기능이 있다.
+if(confirm('continue?')) {
+    doSomething();
+}
+
+
+
+차단 후 생성되는 confirm의 결과는 항상 false가 리턴되고 doSomething()은 실행되지 않는다.
+해당 부분이 중요한 로직이라면 반복 노출 팝업을 차단한 사용자에게 페이지 동작상에 문제가 발생할 수 있다.
+
+이를 방지하기 위해서 팝업이 차단된 상태일때 임의로 confirm의 결과를 
+        </div>
+    </a>
+
+    <small>2016 / 10 / 24</small>
+    <span class="bar">|</span>
+    <span class="home-post-labels">
+            
+            <a class="label">tip</a>
+            
+            <a class="label">javascript</a>
+            
+        </span>
+</div>
+
+<div class="post">
+    <a href="/2016/10/21/spring-resttemplate.html">
+        <h3>Spring RestTemplate</h3>
+        <div class="sample">
+            Spring 내부에는 HTTP 요청을 생성하고 응답을 처리하기 위한 RestTemplate 구현체가 포함되어 있어서 GET, POST, PUT, DELETE, HEAD, OPTIONS 등의 주요 메서드들을 고수준으로 사용 가능하다.
+
+Map&lt;String, String&gt; vars = new HashMap&lt;String, String&gt;();
+vars.put("hotel", "42");
+vars.put("booking", "21");
+String result = restTemplate.getForObject("http
+        </div>
+    </a>
+
+    <small>2016 / 10 / 21</small>
+    <span class="bar">|</span>
+    <span class="home-post-labels">
+            
+            <a class="label">spring</a>
+            
+        </span>
+</div>
+
+<div class="post">
+    <a href="/2016/10/19/1.html">
+        <h3>docker 컨테이너 & 이미지 정리</h3>
+        <div class="sample">
+            docker 명령어의 -q 옵션으로 ID 값들만 가져올 수 있다.
+
+실행중인 모든 컨테이너 중지하기
+docker stop $(docker ps -a -q)
+
+
+
+누적된 이미지들로 디스크가 가득 찼을 경우 등 전체 이미지 삭제 하기
+docker rmi `docker images -a -q`
+
+
+
+이미지 생성 날짜 단위(weeks ago, months ago 등)를 grep 해서 오래된 것만 삭제할 수도 있다.
+docker rmi `docker images -a | grep 'weeks ago\|months ago' | awk '{pr
+        </div>
+    </a>
+
+    <small>2016 / 10 / 19</small>
+    <span class="bar">|</span>
+    <span class="home-post-labels">
+            
+            <a class="label">tip</a>
+            
+            <a class="label">docker</a>
+            
+            <a class="label">shell</a>
+            
+        </span>
+</div>
+
+<div class="pagination">
+    
+    <span class="previous">prev</span>
+    
+    <span class="page_number ">1 / 2</span>
+    
+    <a href="/2/" class="next">next</a>
+    
+</div>
+</section>
+<footer>© 2017 Lee Hongchae</footer>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" type="image/icon" href="/favicon.ico">
+    
+    <title>Spring RestTemplate</title>
+    
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<header>
+    <div id="nav_container">
+        <nav>
+            <a href="/">Dev. Neoguri</a>
+        </nav>
+    </div>
+</header>
+<section id="main">
+    <article>
+    <div class="heading">Spring RestTemplate</div>
+    <p class="meta">🗓 21 Oct 2016</p>
+    <div class="content">
+    <p>Spring 내부에는 HTTP 요청을 생성하고 응답을 처리하기 위한 RestTemplate 구현체가 포함되어 있어서 <strong>GET, POST, PUT, DELETE, HEAD, OPTIONS</strong> 등의 주요 메서드들을 고수준으로 사용 가능하다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">vars</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;();</span>
+<span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"hotel"</span><span class="o">,</span> <span class="s">"42"</span><span class="o">);</span>
+<span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"booking"</span><span class="o">,</span> <span class="s">"21"</span><span class="o">);</span>
+<span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">restTemplate</span><span class="o">.</span><span class="na">getForObject</span><span class="o">(</span><span class="s">"http://example.com/hotels/{hotel}/bookings/{booking}"</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">vars</span><span class="o">);</span>
+</code></pre>
+</div>
+<p>위 코드는 <a href="">http://example.com/hotels/42/rooms/42</a> 에 대한 GET 요청을 수행하여 String 으로 결과를 가져온다.</p>
+
+<p>RestTemplate는 디폴트 설정으로 Java에 내장되어 있는 HTTP 요청 구현을 사용하며 ClientHttpRequestFactory 구현체를 이용하여 override 가능하다. 특히 Apache HttpComponents를 사용하는 HttpComponentsClientHttpRequestFactory를 이용하면 인증 Header나 커넥션 풀 관리에서 유리하다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">RestTemplate</span> <span class="n">template</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RestTemplate</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpComponentsClientHttpRequestFactory</span><span class="o">());</span>
+</code></pre>
+</div>
+
+<hr />
+
+<p>참조</p>
+<ul>
+  <li><a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/remoting.html#rest-resttemplate">http://docs.spring.io/spring/docs/current/spring-framework-reference/html/remoting.html#rest-resttemplate</a></li>
+</ul>
+
+    </div>
+    <!--<div class="tags">
+
+
+
+<a class="label label-default" href="/tags#spring-ref" title="View posts tagged with &quot;spring&quot;">spring</a>
+
+
+</div>-->
+    <!--<div class="post-footer"><a class="back" onclick="history.back();" href="javascript:;">< back</a></div>-->
+</article>
+<span class="separator"></span>
+<div id="disqus_thread"></div>
+<script>
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//dev-neoguri.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+</section>
+<footer>© 2017 Lee Hongchae</footer>
+</body>
+</html>
