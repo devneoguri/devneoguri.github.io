@@ -1,0 +1,94 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" type="image/icon" href="/favicon.ico">
+    
+    <title>RabbitMQ 설치 및 클러스터 구성</title>
+    
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<header>
+    <div id="nav_container">
+        <nav>
+            <a href="/">Dev. Neoguri</a>
+        </nav>
+    </div>
+</header>
+<section id="main">
+    <article>
+    <div class="heading">RabbitMQ 설치 및 클러스터 구성</div>
+    <p class="meta">🗓 18 Sep 2016</p>
+    <div class="content">
+    <p>CentOS7 기준으로 최신 rpm 패키지를 다운받아서 설치한다.
+(<a href="https://www.rabbitmq.com/install-rpm.html">https://www.rabbitmq.com/install-rpm.html</a>)</p>
+
+<p>rabbitmq server를 실행한다.</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">mq-server1$ </span>systemctl start rabbitmq-server
+</code></pre>
+</div>
+
+<p>1번 서버에서 erlang 쿠키 값을 복사하여 다른 서버들에 적용한다.</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">mq-server1$ </span>cat /var/lib/rabbitmq/.erlang.cookie
+<span class="c">#cookie_value#</span>
+</code></pre>
+</div>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">mq-server2$ </span>vi /var/lib/rabbitmq/.erlang.cookie
+</code></pre>
+</div>
+<p>cookie파일 퍼미션이 500인지 확인하고 소유자를 rabbitmq로 맞춰준다.</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">mq-server2$ </span>chmod 500 /var/lib/rabbitmq/.erlang.cookie
+<span class="gp">mq-server2$ </span>chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
+</code></pre>
+</div>
+<p>전체 서버에서 /etc/hosts에 서로 호스트명을 설정 해주고 1번서버의 클러스터에 조인한다.
+join_cluster 명령 실행에서 –ram 옵션을 주면 ram 노드로 아니면 disk 노드로 설정된다.</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">mq-server2$ </span>systemctl start rabbitmq-server
+<span class="gp">mq-server2$ </span>rabbitmqctl stop_app
+<span class="gp">mq-server2$ </span>rabbitmqctl join_cluster --ram rabbit@mq-server1
+<span class="gp">mq-server2$ </span>rabbitmqctl start_app
+</code></pre>
+</div>
+<p>정상적으로 클러스터가 구성되었는지 확인한다.</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">mq-server1$ </span>rabbitmqctl cluster_status
+Cluster status of node rabbit@mq-server1 ...
+<span class="o">[{</span>nodes,[<span class="o">{</span>disc,[rabbit@mq-server1]<span class="o">}</span>,<span class="o">{</span>ram,[rabbit@mq-server2]<span class="o">}]}</span>,
+ <span class="o">{</span>running_nodes,[rabbit@mq-server1,rabbit@mq-server2]<span class="o">}]</span>
+...done.
+</code></pre>
+</div>
+
+<p>추가 참고: management plugin 설치</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">mq-server1$ </span>rabbitmq-plugins <span class="nb">enable </span>rabbitmq_management
+</code></pre>
+</div>
+
+    </div>
+    <!--<div class="tags">
+
+
+
+<a class="label label-default" href="/tags#rabbitmq-ref" title="View posts tagged with &quot;rabbitmq&quot;">rabbitmq</a>
+
+
+</div>-->
+    <!--<div class="post-footer"><a class="back" onclick="history.back();" href="javascript:;">< back</a></div>-->
+</article>
+<span class="separator"></span>
+<div id="disqus_thread"></div>
+<script>
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//dev-neoguri.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+</section>
+<footer>© 2017 Lee Hongchae</footer>
+</body>
+</html>
