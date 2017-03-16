@@ -21,6 +21,29 @@
 <section id="main">
     
 <div class="post">
+    <a href="/2017/03/13/remove-preflight-request.html">
+        <h3>CORS Preflight Request 제거</h3>
+        <div class="sample">
+            다른 도메인 orign 간의 API 호출에서 Access-Control- 헤더들을 사용해서 CORS 요청을 사용할 수 있다. 이때 실제 해당 도메인에 요청이 유효할지 미리 확인하기 위해서 OPTIONS 메서드를 사용한 사전 요청(preflight request)이 추가로 발생한다. Preflight request가 사용되면 두배 많은 요청이 발생하여 네트워크 환경이 좋지 않은 경우 불필요하게 큰 지연이 생길 수 있다.
+
+
+Preflight Cache
+이때 아래 헤더 값을 설정하면 동일한 URL에 대한 preflight 요청을 캐시할
+        </div>
+    </a>
+
+    <small>2017 / 03 / 13</small>
+    <span class="bar">|</span>
+    <span class="home-post-labels">
+            
+            <a class="label" href="/tag/tip.html">tip</a>
+            
+            <a class="label" href="/tag/browser.html">browser</a>
+            
+        </span>
+</div>
+
+<div class="post">
     <a href="/2017/01/04/HSTS.html">
         <h3>HTTP Strict Transport Security</h3>
         <div class="sample">
@@ -74,7 +97,7 @@ public void processAnnotationDate(@RequestParam @DateTimeFormat(patter
     <a href="/2016/10/24/prevent-alert-workaround.html">
         <h3>팝업 금지된 사이트에서의 confirm 처리</h3>
         <div class="sample">
-            웹페이지의 javascript에서 alert이나 confirm을 사용할 때 대부분의 브라우저에는 반복되는 popup을 차단할 수 있는 기능이 있다.
+            웹페이지의 javascript에서 alert이나 confirm을 사용할 때 대부분의 브라우저에는 반복되는 popup의 차단 기능을 제공한다.
 if(confirm('continue?')) {
     doSomething();
 }
@@ -82,9 +105,10 @@ if(confirm('continue?')) {
 
 
 차단 후 생성되는 confirm의 결과는 항상 false가 리턴되고 doSomething()은 실행되지 않는다.
-해당 부분이 중요한 로직이라면 반복 노출 팝업을 차단한 사용자에게 페이지 동작상에 문제가 발생할 수 있다.
 
-이를 방지하기 위해서 팝업이 차단된 상태일때 임의로 confirm의 결과를 
+
+
+팝업 이후 실행되는 부분이 중요한 로직이라면 반복 노출 팝업을 차단한 사용자에게 페이지 동작상에 문제가 발생할 수 있다. 이를 방지하기 위해서 팝업이 차단된 상태일때 임의로 confirm
         </div>
     </a>
 
@@ -117,40 +141,6 @@ String result = restTemplate.getForObject("http
     <span class="home-post-labels">
             
             <a class="label" href="/tag/spring.html">spring</a>
-            
-        </span>
-</div>
-
-<div class="post">
-    <a href="/2016/10/19/remove-docker-image.html">
-        <h3>docker 컨테이너 & 이미지 정리</h3>
-        <div class="sample">
-            docker 명령어의 -q 옵션으로 ID 값들만 가져올 수 있다.
-
-실행중인 모든 컨테이너 중지하기
-$ docker stop $(docker ps -a -q)
-
-
-
-누적된 이미지들로 디스크가 가득 찼을 경우 등 전체 이미지 삭제 하기
-$ docker rmi `docker images -a -q`
-
-
-
-이미지 생성 날짜 단위(weeks ago, months ago 등)를 grep 해서 오래된 것만 삭제할 수도 있다.
-$ docker rmi `docker images -a | grep 'weeks ago\|months ago' | aw
-        </div>
-    </a>
-
-    <small>2016 / 10 / 19</small>
-    <span class="bar">|</span>
-    <span class="home-post-labels">
-            
-            <a class="label" href="/tag/tip.html">tip</a>
-            
-            <a class="label" href="/tag/docker.html">docker</a>
-            
-            <a class="label" href="/tag/shell.html">shell</a>
             
         </span>
 </div>

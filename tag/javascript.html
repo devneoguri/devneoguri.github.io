@@ -27,7 +27,7 @@
     <a href="/2016/10/24/prevent-alert-workaround.html">
         <h3>팝업 금지된 사이트에서의 confirm 처리</h3>
         <div class="sample">
-            웹페이지의 javascript에서 alert이나 confirm을 사용할 때 대부분의 브라우저에는 반복되는 popup을 차단할 수 있는 기능이 있다.
+            웹페이지의 javascript에서 alert이나 confirm을 사용할 때 대부분의 브라우저에는 반복되는 popup의 차단 기능을 제공한다.
 if(confirm('continue?')) {
     doSomething();
 }
@@ -35,9 +35,10 @@ if(confirm('continue?')) {
 
 
 차단 후 생성되는 confirm의 결과는 항상 false가 리턴되고 doSomething()은 실행되지 않는다.
-해당 부분이 중요한 로직이라면 반복 노출 팝업을 차단한 사용자에게 페이지 동작상에 문제가 발생할 수 있다.
 
-이를 방지하기 위해서 팝업이 차단된 상태일때 임의로 confirm의 결과를 
+
+
+팝업 이후 실행되는 부분이 중요한 로직이라면 반복 노출 팝업을 차단한 사용자에게 페이지 동작상에 문제가 발생할 수 있다. 이를 방지하기 위해서 팝업이 차단된 상태일때 임의로 confirm
         </div>
     </a>
 

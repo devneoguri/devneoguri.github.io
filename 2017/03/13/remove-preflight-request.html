@@ -1,0 +1,85 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" type="image/icon" href="/favicon.ico">
+    
+    <title>CORS Preflight Request 제거</title>
+    
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<header>
+    <div id="nav_container">
+        <nav>
+            <a href="/">Dev. Neoguri</a>
+        </nav>
+    </div>
+</header>
+<section id="main">
+    <article>
+    <div class="heading">CORS Preflight Request 제거</div>
+    <p class="meta">🗓 13 Mar 2017</p>
+    <div class="content">
+    <p>다른 도메인 orign 간의 API 호출에서 Access-Control- 헤더들을 사용해서 CORS 요청을 사용할 수 있다. 이때 실제 해당 도메인에 요청이 유효할지 미리 확인하기 위해서 OPTIONS 메서드를 사용한 사전 요청(preflight request)이 추가로 발생한다. Preflight request가 사용되면 두배 많은 요청이 발생하여 네트워크 환경이 좋지 않은 경우 불필요하게 큰 지연이 생길 수 있다.</p>
+<hr />
+
+<h4 id="preflight-cache">Preflight Cache</h4>
+<p>이때 아래 헤더 값을 설정하면 동일한 URL에 대한 preflight 요청을 캐시할 수 있다.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>Access-Control-Max-Age: 3600 (초)
+</code></pre>
+</div>
+<p>그러나 이 값도 설정대로 다 적용되는 것이 아니라 브라우저 별로 한계가 있다. (Webkit은 최대 600초)</p>
+
+<hr />
+
+<p>이로서도 부족할 경우 Simple Request를 사용하면 preflight request가 발생하지 않는다.</p>
+
+<h4 id="simple-request의-충족-요건">Simple Request의 충족 요건</h4>
+<ul>
+  <li>요청 method는 <em>GET</em>, <em>HEAD</em>, <em>POST</em> 만을 사용해야 한다.</li>
+  <li>요청 header는 브라우저에서 설정되는 값 이외에는 <em>Accept</em>, <em>Accept-Language</em>, <em>Content-Language</em>, <em>Content-Type</em> 만을 추가로 사용해야 한다.</li>
+  <li>Content-Type의 값은 <em>application/x-www-form-urlencoded</em>, <em>multipart/form-data</em>, <em>text/plain</em> 중에 하나로만 설정되어야 한다.</li>
+</ul>
+
+<hr />
+
+<p>Authorization 같은 중요 헤더를 사용하지 못하고 추가적인 변경 작업이 필요한 경우라면 동일한 도메인으로 proxy를 설정하여 CORS 상태가 아니게 하는 것이 더 쉬울 수도 있다.</p>
+
+<hr />
+
+<p>참조</p>
+<ul>
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Preflighted_requests">https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Preflighted_requests</a></li>
+</ul>
+
+    </div>
+    <!--<div class="tags">
+
+
+
+<a class="label label-default" href="/tags#tip-ref" title="View posts tagged with &quot;tip&quot;">tip</a>
+
+<a class="label label-default" href="/tags#browser-ref" title="View posts tagged with &quot;browser&quot;">browser</a>
+
+
+</div>-->
+    <!--<div class="post-footer"><a class="back" onclick="history.back();" href="javascript:;">< back</a></div>-->
+</article>
+<span class="separator"></span>
+<div id="disqus_thread"></div>
+<script>
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//dev-neoguri.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+</section>
+<footer>© 2017 Lee Hongchae</footer>
+</body>
+</html>

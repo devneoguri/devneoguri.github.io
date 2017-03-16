@@ -113,7 +113,7 @@ nav ul li a:hover {
     position: relative;
     top: -2.3em;
 }
-p em {
+em {
     font-weight: 400;
     font-size: 98%;
 }

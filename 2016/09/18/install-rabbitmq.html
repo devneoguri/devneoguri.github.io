@@ -26,6 +26,8 @@
     <p>CentOS7 기준으로 최신 rpm 패키지를 다운받아서 설치한다.
 (<a href="https://www.rabbitmq.com/install-rpm.html">https://www.rabbitmq.com/install-rpm.html</a>)</p>
 
+<hr />
+
 <p>rabbitmq server를 실행한다.</p>
 <div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">mq-server1$ </span>systemctl start rabbitmq-server
 </code></pre>
@@ -39,6 +41,9 @@
 <div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">mq-server2$ </span>vi /var/lib/rabbitmq/.erlang.cookie
 </code></pre>
 </div>
+
+<hr />
+
 <p>cookie파일 퍼미션이 500인지 확인하고 소유자를 rabbitmq로 맞춰준다.</p>
 <div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">mq-server2$ </span>chmod 500 /var/lib/rabbitmq/.erlang.cookie
 <span class="gp">mq-server2$ </span>chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
@@ -52,6 +57,9 @@ join_cluster 명령 실행에서 –ram 옵션을 주면 ram 노드로 아니면
 <span class="gp">mq-server2$ </span>rabbitmqctl start_app
 </code></pre>
 </div>
+
+<hr />
+
 <p>정상적으로 클러스터가 구성되었는지 확인한다.</p>
 <div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">mq-server1$ </span>rabbitmqctl cluster_status
 Cluster status of node rabbit@mq-server1 ...
@@ -60,6 +68,8 @@ Cluster status of node rabbit@mq-server1 ...
 ...done.
 </code></pre>
 </div>
+
+<hr />
 
 <p>추가 참고: management plugin 설치</p>
 <div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">mq-server1$ </span>rabbitmq-plugins <span class="nb">enable </span>rabbitmq_management

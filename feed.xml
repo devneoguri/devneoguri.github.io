@@ -1,4 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.4.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2017-03-06T00:08:23+09:00</updated><id>//</id><title type="html">Dev. Neoguri</title><entry><title type="html">HTTP Strict Transport Security</title><link href="/2017/01/04/HSTS.html" rel="alternate" type="text/html" title="HTTP Strict Transport Security" /><published>2017-01-04T15:05:00+09:00</published><updated>2017-01-04T15:05:00+09:00</updated><id>/2017/01/04/HSTS</id><content type="html" xml:base="/2017/01/04/HSTS.html">&lt;p&gt;https 요청의 response header에 ‘Strict-Transport-Security’ 가 포함되어 있으면 해당 도메인에 대해서 브라우저에 가능한 https로 통신하라고 알려주는 기능&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.4.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2017-03-16T14:37:53+09:00</updated><id>//</id><title type="html">Dev. Neoguri</title><entry><title type="html">CORS Preflight Request 제거</title><link href="/2017/03/13/remove-preflight-request.html" rel="alternate" type="text/html" title="CORS Preflight Request 제거" /><published>2017-03-13T15:05:00+09:00</published><updated>2017-03-13T15:05:00+09:00</updated><id>/2017/03/13/remove-preflight-request</id><content type="html" xml:base="/2017/03/13/remove-preflight-request.html">&lt;p&gt;다른 도메인 orign 간의 API 호출에서 Access-Control- 헤더들을 사용해서 CORS 요청을 사용할 수 있다. 이때 실제 해당 도메인에 요청이 유효할지 미리 확인하기 위해서 OPTIONS 메서드를 사용한 사전 요청(preflight request)이 추가로 발생한다. Preflight request가 사용되면 두배 많은 요청이 발생하여 네트워크 환경이 좋지 않은 경우 불필요하게 큰 지연이 생길 수 있다.&lt;/p&gt;
+&lt;hr /&gt;
+
+&lt;h4 id=&quot;preflight-cache&quot;&gt;Preflight Cache&lt;/h4&gt;
+&lt;p&gt;이때 아래 헤더 값을 설정하면 동일한 URL에 대한 preflight 요청을 캐시할 수 있다.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Access-Control-Max-Age: 3600 (초)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;그러나 이 값도 설정대로 다 적용되는 것이 아니라 브라우저 별로 한계가 있다. (Webkit은 최대 600초)&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;이로서도 부족할 경우 Simple Request를 사용하면 preflight request가 발생하지 않는다.&lt;/p&gt;
+
+&lt;h4 id=&quot;simple-request의-충족-요건&quot;&gt;Simple Request의 충족 요건&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;요청 method는 &lt;em&gt;GET&lt;/em&gt;, &lt;em&gt;HEAD&lt;/em&gt;, &lt;em&gt;POST&lt;/em&gt; 만을 사용해야 한다.&lt;/li&gt;
+  &lt;li&gt;요청 header는 브라우저에서 설정되는 값 이외에는 &lt;em&gt;Accept&lt;/em&gt;, &lt;em&gt;Accept-Language&lt;/em&gt;, &lt;em&gt;Content-Language&lt;/em&gt;, &lt;em&gt;Content-Type&lt;/em&gt; 만을 추가로 사용해야 한다.&lt;/li&gt;
+  &lt;li&gt;Content-Type의 값은 &lt;em&gt;application/x-www-form-urlencoded&lt;/em&gt;, &lt;em&gt;multipart/form-data&lt;/em&gt;, &lt;em&gt;text/plain&lt;/em&gt; 중에 하나로만 설정되어야 한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Authorization 같은 중요 헤더를 사용하지 못하고 추가적인 변경 작업이 필요한 경우라면 동일한 도메인으로 proxy를 설정하여 CORS 상태가 아니게 하는 것이 더 쉬울 수도 있다.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;참조&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Preflighted_requests&quot;&gt;https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Preflighted_requests&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><category term="tip" /><category term="browser" /><summary type="html">다른 도메인 orign 간의 API 호출에서 Access-Control- 헤더들을 사용해서 CORS 요청을 사용할 수 있다. 이때 실제 해당 도메인에 요청이 유효할지 미리 확인하기 위해서 OPTIONS 메서드를 사용한 사전 요청(preflight request)이 추가로 발생한다. Preflight request가 사용되면 두배 많은 요청이 발생하여 네트워크 환경이 좋지 않은 경우 불필요하게 큰 지연이 생길 수 있다.</summary></entry><entry><title type="html">HTTP Strict Transport Security</title><link href="/2017/01/04/HSTS.html" rel="alternate" type="text/html" title="HTTP Strict Transport Security" /><published>2017-01-04T15:05:00+09:00</published><updated>2017-01-04T15:05:00+09:00</updated><id>/2017/01/04/HSTS</id><content type="html" xml:base="/2017/01/04/HSTS.html">&lt;p&gt;https 요청의 response header에 ‘Strict-Transport-Security’ 가 포함되어 있으면 해당 도메인에 대해서 브라우저에 가능한 https로 통신하라고 알려주는 기능&lt;/p&gt;
 
 &lt;p&gt;http로 들어가도 307 status로 https redirect 된다. 명시적인 301 처리보다 비용적으로 유리하다.&lt;/p&gt;
 
@@ -24,6 +54,9 @@
 ...
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+
+&lt;hr /&gt;
+
 &lt;p&gt;https가 지원되지 않는 개발 환경을 테스트할 경우 등에 해당 기능을 끄고 싶은 경우가 있다.&lt;/p&gt;
 
 &lt;h4 id=&quot;spring-security에서-끄는법&quot;&gt;Spring Security에서 끄는법&lt;/h4&gt;
@@ -58,9 +91,11 @@
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;field의 기본 포맷은 locale을 따르며 ko_KR 에서 LocalDate 기본은 &lt;em&gt;[ yy. mm. dd ]&lt;/em&gt; 이런식으로 생겼다.&lt;/p&gt;
 
-&lt;p&gt;디폴트 설정된 상세 내용은 아래를 참고하여 소스에서 확인 가능하다.&lt;/p&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;field의 기본 포맷은 locale을 따르며 ko_KR 에서 LocalDate 기본은 &lt;em&gt;[ yy. mm. dd ]&lt;/em&gt; 이런식으로 생겼다.
+디폴트 설정된 상세 내용은 아래를 참고하여 소스에서 확인 가능하다.&lt;/p&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;//DefaultFormattingConversionService.java&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;DateTimeFormatterRegistrar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;JSR310&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JodaTimeFormatterRegistrar&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateFormatterRegistrar&lt;/span&gt;
 
@@ -74,21 +109,24 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
+&lt;hr /&gt;
+
 &lt;p&gt;지원되지 않는 포맷 처리를 위해서는 WebDataBinder에 에디터 처리를 추가하던가 Converter 를 구현해야한다.&lt;/p&gt;</content><category term="spring" /><summary type="html">Spring 3.1 이후 버전에서는 Controller @RequestParam 등에서 바로 date format 처리가 가능하도록 field type 기반의 formatter 와 annotation 기반의 formatter 들이 정의 되어 있다.
 ```java
 public void processFieldDate(@RequestParam LocalDate localDate) {  // yy. mm. dd
    …
-}</summary></entry><entry><title type="html">팝업 금지된 사이트에서의 confirm 처리</title><link href="/2016/10/24/prevent-alert-workaround.html" rel="alternate" type="text/html" title="팝업 금지된 사이트에서의 confirm 처리" /><published>2016-10-24T01:10:00+09:00</published><updated>2016-10-24T01:10:00+09:00</updated><id>/2016/10/24/prevent-alert-workaround</id><content type="html" xml:base="/2016/10/24/prevent-alert-workaround.html">&lt;p&gt;웹페이지의 javascript에서 alert이나 confirm을 사용할 때 대부분의 브라우저에는 반복되는 popup을 차단할 수 있는 기능이 있다.&lt;/p&gt;
+}</summary></entry><entry><title type="html">팝업 금지된 사이트에서의 confirm 처리</title><link href="/2016/10/24/prevent-alert-workaround.html" rel="alternate" type="text/html" title="팝업 금지된 사이트에서의 confirm 처리" /><published>2016-10-24T01:10:00+09:00</published><updated>2016-10-24T01:10:00+09:00</updated><id>/2016/10/24/prevent-alert-workaround</id><content type="html" xml:base="/2016/10/24/prevent-alert-workaround.html">&lt;p&gt;웹페이지의 javascript에서 alert이나 confirm을 사용할 때 대부분의 브라우저에는 반복되는 popup의 차단 기능을 제공한다.&lt;/p&gt;
 &lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;confirm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'continue?'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;nx&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;&lt;img src=&quot;/img/prevent_popup.png&quot; alt=&quot;a&quot; /&gt;
-차단 후 생성되는 confirm의 결과는 항상 false가 리턴되고 doSomething()은 실행되지 않는다.
-해당 부분이 중요한 로직이라면 반복 노출 팝업을 차단한 사용자에게 페이지 동작상에 문제가 발생할 수 있다.&lt;/p&gt;
+차단 후 생성되는 confirm의 결과는 항상 false가 리턴되고 doSomething()은 실행되지 않는다.&lt;/p&gt;
 
-&lt;p&gt;이를 방지하기 위해서 팝업이 차단된 상태일때 임의로 confirm의 결과를 항상 true로 처리하고자 한다면 아래 방법으로 가능하다.&lt;/p&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;팝업 이후 실행되는 부분이 중요한 로직이라면 반복 노출 팝업을 차단한 사용자에게 페이지 동작상에 문제가 발생할 수 있다. 이를 방지하기 위해서 팝업이 차단된 상태일때 임의로 confirm의 결과를 항상 true로 처리하고자 한다면 아래 방법으로 가능하다.&lt;/p&gt;
 &lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;confirmTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;confirm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'continue?'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;nx&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
@@ -97,15 +135,14 @@ public void processFieldDate(@RequestParam LocalDate localDate) {  // yy. mm. dd
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;사용자의 입력으로는 (거의 아마도..) 10ms 안에 Cancel을 선택할 수 없을 것이며 doSomething()은 항상 실행된다.&lt;/p&gt;</content><category term="tip" /><category term="javascript" /><summary type="html">웹페이지의 javascript에서 alert이나 confirm을 사용할 때 대부분의 브라우저에는 반복되는 popup을 차단할 수 있는 기능이 있다.
+&lt;p&gt;사용자의 입력으로는 (거의 아마도..) 10ms 안에 Cancel을 선택할 수 없을 것이며 doSomething()은 항상 실행된다.&lt;/p&gt;</content><category term="tip" /><category term="javascript" /><summary type="html">웹페이지의 javascript에서 alert이나 confirm을 사용할 때 대부분의 브라우저에는 반복되는 popup의 차단 기능을 제공한다.
 if(confirm('continue?')) {
     doSomething();
 }
 
 
 
-차단 후 생성되는 confirm의 결과는 항상 false가 리턴되고 doSomething()은 실행되지 않는다.
-해당 부분이 중요한 로직이라면 반복 노출 팝업을 차단한 사용자에게 페이지 동작상에 문제가 발생할 수 있다.</summary></entry><entry><title type="html">Spring RestTemplate</title><link href="/2016/10/21/spring-resttemplate.html" rel="alternate" type="text/html" title="Spring RestTemplate" /><published>2016-10-21T23:30:00+09:00</published><updated>2016-10-21T23:30:00+09:00</updated><id>/2016/10/21/spring-resttemplate</id><content type="html" xml:base="/2016/10/21/spring-resttemplate.html">&lt;p&gt;Spring 내부에는 HTTP 요청을 생성하고 응답을 처리하기 위한 RestTemplate 구현체가 포함되어 있어서 &lt;strong&gt;GET, POST, PUT, DELETE, HEAD, OPTIONS&lt;/strong&gt; 등의 주요 메서드들을 고수준으로 사용 가능하다.&lt;/p&gt;
+차단 후 생성되는 confirm의 결과는 항상 false가 리턴되고 doSomething()은 실행되지 않는다.</summary></entry><entry><title type="html">Spring RestTemplate</title><link href="/2016/10/21/spring-resttemplate.html" rel="alternate" type="text/html" title="Spring RestTemplate" /><published>2016-10-21T23:30:00+09:00</published><updated>2016-10-21T23:30:00+09:00</updated><id>/2016/10/21/spring-resttemplate</id><content type="html" xml:base="/2016/10/21/spring-resttemplate.html">&lt;p&gt;Spring 내부에는 HTTP 요청을 생성하고 응답을 처리하기 위한 RestTemplate 구현체가 포함되어 있어서 &lt;strong&gt;GET, POST, PUT, DELETE, HEAD, OPTIONS&lt;/strong&gt; 등의 주요 메서드들을 고수준으로 사용 가능하다.&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vars&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;vars&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;hotel&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;42&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
@@ -114,6 +151,8 @@ if(confirm('continue?')) {
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;위 코드는 &lt;a href=&quot;&quot;&gt;http://example.com/hotels/42/rooms/42&lt;/a&gt; 에 대한 GET 요청을 수행하여 String 으로 결과를 가져온다.&lt;/p&gt;
+
+&lt;hr /&gt;
 
 &lt;p&gt;RestTemplate는 디폴트 설정으로 Java에 내장되어 있는 HTTP 요청 구현을 사용하며 ClientHttpRequestFactory 구현체를 이용하여 override 가능하다. 특히 Apache HttpComponents를 사용하는 HttpComponentsClientHttpRequestFactory를 이용하면 인증 Header나 커넥션 풀 관리에서 유리하다.&lt;/p&gt;
 
@@ -144,6 +183,8 @@ if(confirm('continue?')) {
 &lt;/div&gt;</content><category term="tip" /><category term="docker" /><category term="shell" /><summary type="html">docker 명령어의 -q 옵션으로 ID 값들만 가져올 수 있다.</summary></entry><entry><title type="html">RabbitMQ 설치 및 클러스터 구성</title><link href="/2016/09/18/install-rabbitmq.html" rel="alternate" type="text/html" title="RabbitMQ 설치 및 클러스터 구성" /><published>2016-09-18T22:05:00+09:00</published><updated>2016-09-18T22:05:00+09:00</updated><id>/2016/09/18/install-rabbitmq</id><content type="html" xml:base="/2016/09/18/install-rabbitmq.html">&lt;p&gt;CentOS7 기준으로 최신 rpm 패키지를 다운받아서 설치한다.
 (&lt;a href=&quot;https://www.rabbitmq.com/install-rpm.html&quot;&gt;https://www.rabbitmq.com/install-rpm.html&lt;/a&gt;)&lt;/p&gt;
 
+&lt;hr /&gt;
+
 &lt;p&gt;rabbitmq server를 실행한다.&lt;/p&gt;
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;mq-server1$ &lt;/span&gt;systemctl start rabbitmq-server
 &lt;/code&gt;&lt;/pre&gt;
@@ -157,6 +198,9 @@ if(confirm('continue?')) {
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;mq-server2$ &lt;/span&gt;vi /var/lib/rabbitmq/.erlang.cookie
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+
+&lt;hr /&gt;
+
 &lt;p&gt;cookie파일 퍼미션이 500인지 확인하고 소유자를 rabbitmq로 맞춰준다.&lt;/p&gt;
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;mq-server2$ &lt;/span&gt;chmod 500 /var/lib/rabbitmq/.erlang.cookie
 &lt;span class=&quot;gp&quot;&gt;mq-server2$ &lt;/span&gt;chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
@@ -170,6 +214,9 @@ join_cluster 명령 실행에서 –ram 옵션을 주면 ram 노드로 아니면
 &lt;span class=&quot;gp&quot;&gt;mq-server2$ &lt;/span&gt;rabbitmqctl start_app
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+
+&lt;hr /&gt;
+
 &lt;p&gt;정상적으로 클러스터가 구성되었는지 확인한다.&lt;/p&gt;
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;mq-server1$ &lt;/span&gt;rabbitmqctl cluster_status
 Cluster status of node rabbit@mq-server1 ...
@@ -178,6 +225,8 @@ Cluster status of node rabbit@mq-server1 ...
 ...done.
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+
+&lt;hr /&gt;
 
 &lt;p&gt;추가 참고: management plugin 설치&lt;/p&gt;
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;mq-server1$ &lt;/span&gt;rabbitmq-plugins &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;rabbitmq_management

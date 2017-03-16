@@ -33,9 +33,11 @@
 <span class="o">}</span>
 </code></pre>
 </div>
-<p>field의 기본 포맷은 locale을 따르며 ko_KR 에서 LocalDate 기본은 <em>[ yy. mm. dd ]</em> 이런식으로 생겼다.</p>
 
-<p>디폴트 설정된 상세 내용은 아래를 참고하여 소스에서 확인 가능하다.</p>
+<hr />
+
+<p>field의 기본 포맷은 locale을 따르며 ko_KR 에서 LocalDate 기본은 <em>[ yy. mm. dd ]</em> 이런식으로 생겼다.
+디폴트 설정된 상세 내용은 아래를 참고하여 소스에서 확인 가능하다.</p>
 <div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">//DefaultFormattingConversionService.java</span>
 <span class="n">DateTimeFormatterRegistrar</span><span class="o">(</span><span class="n">JSR310</span><span class="o">)</span> <span class="o">,</span> <span class="n">JodaTimeFormatterRegistrar</span> <span class="o">|</span> <span class="n">DateFormatterRegistrar</span>
 
@@ -48,6 +50,8 @@
 <span class="n">parse</span><span class="o">(</span><span class="n">String</span> <span class="n">text</span><span class="o">,</span> <span class="n">Locale</span> <span class="n">locale</span><span class="o">)</span> <span class="o">;</span>
 </code></pre>
 </div>
+
+<hr />
 
 <p>지원되지 않는 포맷 처리를 위해서는 WebDataBinder에 에디터 처리를 추가하던가 Converter 를 구현해야한다.</p>
 
